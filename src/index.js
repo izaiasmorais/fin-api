@@ -23,6 +23,18 @@ function verifyCpfAccountExists(request, response, next) {
   return next();
 }
 
+function getBalance(statement) {
+  const balance = statement.reduce((acc, operation) => {
+    if (operation.type === "credit") {
+      return acc + operation.amount;
+    } else {
+      return acc - operation.amount;
+    }
+  }, 0);
+
+  return balance;
+}
+
 app.post("/account", (request, response) => {
   const { cpf, name } = request.body;
 
@@ -43,8 +55,6 @@ app.post("/account", (request, response) => {
 
   return response.status(201).send();
 });
-
-// app.use(verifyCpfAccountExists);
 
 app.get("/statement", verifyCpfAccountExists, (request, response) => {
   const { customer } = request;
@@ -81,6 +91,37 @@ app.get("/statement/date", verifyCpfAccountExists, (request, response) => {
   });
 
   return response.json(statement);
+});
+
+app.put("/account", verifyCpfAccountExists, (request, response) => {
+  const { name } = request.body;
+  const { customer } = request;
+
+  customer.name = name;
+
+  return response.status(200).send();
+});
+
+app.get("/account", verifyCpfAccountExists, (request, response) => {
+  const { customer } = request;
+
+  return response.json(customer);
+});
+
+app.delete("/account", verifyCpfAccountExists, (request, response) => {
+  const { customer } = request;
+
+  customers.splice(customer, 1);
+
+  return response.status(200).json(customers);
+});
+
+app.get("/balance", verifyCpfAccountExists, (request, response) => {
+  const { customer } = request;
+
+  const balance = getBalance(customer.statement);
+
+  return response.json(balance);
 });
 
 app.listen(3333);
