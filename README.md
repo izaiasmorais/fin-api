@@ -24,17 +24,17 @@ Uma API para geranciar finanças com todas as funcionalidades básicas completas
 - [Node.js](https://nodejs.org/en/)
 - [Express](https://expressjs.com/)
 
-## 💻 Cloning project
+## 💻 Clonando Projeto
 
 ```bash
 $ git clone https://github.com/IzaiasMorais/fin-api.git && cd fin-api
 ```
 
 ```bash
-# Install the dependecies
+# Instalar dependências
 $ yarn
 
-# Run the project
+# Rodar o projeto
 $ yarn dev
 
 ```
